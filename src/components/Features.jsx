@@ -45,6 +45,100 @@ const tiers = [
   }
 ];
 
+// Lightweight inline SVGs to visually populate the console + mobile mock frames without external assets.
+function ConsoleSVG() {
+  return (
+    <svg viewBox="0 0 800 450" className="h-full w-full rounded-xl" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#0f172a" />
+          <stop offset="100%" stopColor="#111827" />
+        </linearGradient>
+        <linearGradient id="pill" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#a855f7" />
+          <stop offset="50%" stopColor="#6366f1" />
+          <stop offset="100%" stopColor="#22d3ee" />
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="800" height="450" fill="url(#g1)" stroke="rgba(255,255,255,0.08)" />
+      {/* Top bar */}
+      <rect x="16" y="16" rx="10" ry="10" width="768" height="40" fill="rgba(255,255,255,0.04)" />
+      <circle cx="36" cy="36" r="6" fill="#ef4444" />
+      <circle cx="56" cy="36" r="6" fill="#f59e0b" />
+      <circle cx="76" cy="36" r="6" fill="#10b981" />
+      <rect x="650" y="24" rx="8" ry="8" width="120" height="24" fill="url(#pill)" opacity="0.9" />
+      {/* Left nav */}
+      <rect x="16" y="72" width="160" height="362" rx="12" fill="rgba(255,255,255,0.03)" />
+      {Array.from({ length: 6 }).map((_, i) => (
+        <rect key={i} x="28" y={90 + i * 48} width="136" height="20" rx="6" fill={i === 1 ? 'rgba(168,85,247,0.45)' : 'rgba(255,255,255,0.08)'} />
+      ))}
+      {/* Main graph panel */}
+      <rect x="192" y="72" width="592" height="200" rx="12" fill="rgba(255,255,255,0.03)" />
+      {/* Grid lines */}
+      {Array.from({ length: 6 }).map((_, i) => (
+        <line key={i} x1="204" y1={100 + i * 28} x2="772" y2={100 + i * 28} stroke="rgba(255,255,255,0.06)" />
+      ))}
+      {/* Trend line */}
+      <polyline
+        fill="none"
+        stroke="url(#pill)"
+        strokeWidth="3"
+        points="200,240 260,210 320,220 380,180 440,190 500,140 560,160 620,120 680,150 740,110"
+      />
+      {/* Transcript panel */}
+      <rect x="192" y="288" width="592" height="146" rx="12" fill="rgba(255,255,255,0.03)" />
+      {Array.from({ length: 5 }).map((_, i) => (
+        <>
+          <circle key={`c-${i}`} cx="216" cy={318 + i * 24} r="8" fill={i % 2 ? '#22d3ee' : '#a855f7'} />
+          <rect key={`r-${i}`} x="232" y={308 + i * 24} width={i % 2 ? 320 : 420} height="16" rx="4" fill="rgba(255,255,255,0.24)" />
+        </>
+      ))}
+    </svg>
+  );
+}
+
+function MobileSVG() {
+  return (
+    <svg viewBox="0 0 300 600" className="h-full w-full rounded-xl" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#0f172a" />
+          <stop offset="100%" stopColor="#111827" />
+        </linearGradient>
+        <linearGradient id="pulse" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#22d3ee" />
+          <stop offset="100%" stopColor="#a855f7" />
+        </linearGradient>
+      </defs>
+      {/* Phone body */}
+      <rect x="10" y="10" width="280" height="580" rx="40" fill="url(#g2)" stroke="rgba(255,255,255,0.10)" />
+      <rect x="36" y="80" width="228" height="494" rx="24" fill="rgba(255,255,255,0.03)" />
+      {/* Notch */}
+      <rect x="120" y="24" width="60" height="8" rx="4" fill="rgba(255,255,255,0.3)" />
+      {/* Waveform bars */}
+      {Array.from({ length: 27 }).map((_, i) => (
+        <rect
+          key={i}
+          x={48 + i * 8}
+          y={320 - (Math.sin(i / 2) * 40 + 60)}
+          width="4"
+          height={Math.sin(i / 2) * 80 + 140}
+          rx="2"
+          fill="url(#pulse)"
+          opacity={0.7}
+        />
+      ))}
+      {/* Mic pill */}
+      <rect x="96" y="520" width="108" height="32" rx="16" fill="rgba(255,255,255,0.12)" />
+      <circle cx="110" cy="536" r="6" fill="#22d3ee" />
+      <rect x="124" y="528" width="70" height="16" rx="8" fill="rgba(255,255,255,0.4)" />
+      {/* Top labels */}
+      <rect x="52" y="96" width="64" height="16" rx="6" fill="rgba(168,85,247,0.45)" />
+      <rect x="120" y="96" width="92" height="16" rx="6" fill="rgba(255,255,255,0.15)" />
+    </svg>
+  );
+}
+
 export default function Features() {
   return (
     <section id="features" className="relative py-24">
@@ -86,13 +180,15 @@ export default function Features() {
           ))}
         </div>
 
-        {/* Showcase: product screenshots (stylized mock frames) */}
+        {/* Showcase: product screenshots (now with inline SVG illustrations) */}
         <div id="solutions" className="mt-16">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-white/10 to-white/5">
               <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(70%_60%_at_40%_0%,rgba(34,211,238,0.20),transparent_60%)]" />
               <div className="relative aspect-[16/9] p-4">
-                <div className="h-full w-full rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 border border-white/10" />
+                <div className="h-full w-full rounded-2xl border border-white/10 overflow-hidden bg-slate-900">
+                  <ConsoleSVG />
+                </div>
               </div>
               <div className="relative p-6">
                 <h4 className="text-white font-semibold">Live Console</h4>
@@ -102,7 +198,9 @@ export default function Features() {
             <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-white/10 to-white/5">
               <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(70%_60%_at_60%_0%,rgba(168,85,247,0.20),transparent_60%)]" />
               <div className="relative aspect-[9/16] p-4">
-                <div className="h-full w-full rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 border border-white/10" />
+                <div className="h-full w-full rounded-2xl border border-white/10 overflow-hidden bg-slate-900">
+                  <MobileSVG />
+                </div>
               </div>
               <div className="relative p-6">
                 <h4 className="text-white font-semibold">Mobile SDK</h4>
